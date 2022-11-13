@@ -1,10 +1,10 @@
 {
   "name": "cncjs-pendant-logilink-numpad",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple logilink numpad pendant for cncjs.",
   "main": "./index.js",
   "engines": {
-    "node": ">=4"
+    "node": ">=10"
   },
   "bin": {
     "cncjs-pendant-boilerplate": "bin/cncjs-pendant-numpad"
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nsfilho/cncjs-pendant-keyboard.git"
+    "url": "git+https://github.com/cncjs/cncjs-pendant-keyboard.git"
   },
   "keywords": [
     "cncjs",
@@ -25,17 +25,17 @@
   "author": "Nelio Santos <nelio@e01aio.com.br>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nsfilho/cncjs-pendant-keyboard/issues"
+    "url": "https://github.com/cncjs/cncjs-pendant-keyboard/issues"
   },
-  "homepage": "https://github.com/nsfilho/cncjs-pendant-keyboard#readme",
+  "homepage": "https://github.com/cncjs/cncjs-pendant-keyboard#readme",
   "dependencies": {
-    "commander": "^5.1.0-4",
-    "inquirer": "^3.0.1",
-    "jsonwebtoken": "7.4.3",
-    "lodash": "^4.17.20",
-    "serialport": "^9.0.3",
-    "socket.io-client": "^2.3.0",
+    "commander": "^9.4.1",
+    "inquirer": "^8.0.0",
+    "jsonwebtoken": "^8.5.1", 
+    "lodash": "^4.17.21",
+    "serialport": "^10.4.0",
+    "socket.io-client": "^4.5.3",
     "vorpal": "^1.12.0",
-    "node-hid" : "^2.1.1"
+    "node-hid": "^2.1.2"
   }
 }
