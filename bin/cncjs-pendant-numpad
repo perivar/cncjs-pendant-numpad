@@ -16,7 +16,10 @@ program
   .version(pkg.version)
   .usage("-s <secret> -p <port> [options]")
   .option("-l, --list", "list available ports then exit")
-  .option("-d, --devicelist", "list available devices then exit (optionally vendor- and productid)")
+  .option(
+    "-d, --devicelist",
+    "list available devices then exit (optionally vendor- and productid)"
+  )
   .option(
     "-s, --secret",
     "the secret key stored in the ~/.cncjs/cncrc.cfg file"
@@ -80,7 +83,11 @@ if (options.devicelist) {
   });
 
   if (options.vendorid && options.productid) {
-    console.log("Looking for keyboard with VID:PID:", options.vendorid, options.productid);
+    console.log(
+      "Looking for keyboard with VID:PID:",
+      options.vendorid,
+      options.productid
+    );
 
     const findPath = (interface) => {
       var devices = hid.devices();
@@ -94,10 +101,18 @@ if (options.devicelist) {
       );
 
       if (deviceInfo) {
-	console.log("Successfully found device with VID:PID:", options.vendorid, options.productid);
+        console.log(
+          "Successfully found device with VID:PID:",
+          options.vendorid,
+          options.productid
+        );
         return deviceInfo.path;
       } else {
-	console.log("Failed searching for device with VID:PID:", options.vendorid, options.productid);
+        console.log(
+          "Failed searching for device with VID:PID:",
+          options.vendorid,
+          options.productid
+        );
         return "No device found";
       }
     };
