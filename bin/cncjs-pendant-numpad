@@ -16,6 +16,7 @@ program
   .version(pkg.version)
   .usage("-s <secret> -p <port> [options]")
   .option("-l, --list", "list available ports then exit")
+  .option("-d, --devicelist", "list available devices then exit (optionally vendor- and productid)")
   .option(
     "-s, --secret",
     "the secret key stored in the ~/.cncjs/cncrc.cfg file"
@@ -38,10 +39,9 @@ program
     "access token lifetime in seconds or a time span string (default: 30d)",
     "30d"
   )
-  .option("--probeoffset <offset>", "offset (thickness) for Z probe", "1.56")
+  .option("--probeoffset <offset>", "offset (thickness) for Z probe", "19.5")
   .option("--vendorid <vendor>", "Vendor ID of USB HID device")
-  .option("--productid <product>", "Product ID of USB HID device")
-  .option("--devicelist", "list available devices then exit");
+  .option("--productid <product>", "Product ID of USB HID device");
 
 program.parse();
 // get the parsed options
@@ -67,16 +67,20 @@ if (options.list) {
 if (options.devicelist) {
   var devices = hid.devices();
 
+  // console.log("devices: ", devices);
+
   devices.forEach(function (item) {
+    console.log("manufacturer: ", item.manufacturer);
+    console.log("product: ", item.product);
     console.log("vendorId: ", item.vendorId);
     console.log("productId: ", item.productId);
-    console.log("manufacturer: ", item.manufacturer);
     console.log("interface: ", item.interface);
+    console.log("path: ", item.path);
     console.log();
   });
 
   if (options.vendorid && options.productid) {
-    console.log("Keyboard VID:PID is ", options.vendorid, options.productid);
+    console.log("Looking for keyboard with VID:PID:", options.vendorid, options.productid);
 
     const findPath = (interface) => {
       var devices = hid.devices();
@@ -90,7 +94,11 @@ if (options.devicelist) {
       );
 
       if (deviceInfo) {
+	console.log("Successfully found device with VID:PID:", options.vendorid, options.productid);
         return deviceInfo.path;
+      } else {
+	console.log("Failed searching for device with VID:PID:", options.vendorid, options.productid);
+        return "No device found";
       }
     };
 
@@ -262,7 +270,7 @@ var createServer = function (options) {
 
         case 99: // .
           socket.emit("write", options.port, "G91;\n");
-          socket.emit("write", options.port, "G38.2 Z-10 F87\n");
+          socket.emit("write", options.port, "G38.2 Z-100 F200\n");
           socket.emit(
             "write",
             options.port,
