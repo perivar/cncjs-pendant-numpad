@@ -4,7 +4,7 @@
   "description": "A simple logilink numpad pendant for cncjs.",
   "main": "./index.js",
   "engines": {
-    "node": ">=12"
+    "node": ">=10"
   },
   "bin": {
     "cncjs-pendant-boilerplate": "bin/cncjs-pendant-numpad"
@@ -29,11 +29,11 @@
   },
   "homepage": "https://github.com/cncjs/cncjs-pendant-keyboard#readme",
   "dependencies": {
-    "commander": "^9.4.1",
-    "inquirer": "^8.0.0",
+    "commander": "^7.0.0",
+    "inquirer": "^7.0.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
-    "serialport": "^10.4.0",
+    "serialport": "^9.0.0",
     "socket.io-client": "^2.5.0",
     "vorpal": "^1.12.0",
     "node-hid": "^2.1.2"

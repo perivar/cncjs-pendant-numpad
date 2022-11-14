@@ -3,12 +3,12 @@
 var fs = require("fs");
 var inquirer = require("inquirer");
 var hid = require("node-hid");
-const { program } = require("commander");
-var { SerialPort } = require("serialport");
+var serialport = require("serialport");
+var { program } = require("commander");
 
 var pkg = require("../package.json");
 var serverMain = require("../index");
-const path = require("path");
+var path = require("path");
 
 var options = {};
 
@@ -52,7 +52,8 @@ program.parse();
 var options = program.opts();
 
 if (options.list) {
-  SerialPort.list()
+  serialport
+    .list()
     .then((ports) => {
       ports.forEach(function (port) {
         console.log(port.path);
@@ -357,7 +358,8 @@ if (options.port) {
   return;
 }
 
-SerialPort.list()
+serialport
+  .list()
   .then((ports) => {
     const choices = ports.map(function (port) {
       return port.path;
