@@ -70,18 +70,6 @@ if (options.list) {
 if (options.devicelist) {
   var devices = hid.devices();
 
-  // console.log("devices: ", devices);
-
-  devices.forEach(function (item) {
-    console.log("manufacturer: ", item.manufacturer);
-    console.log("product: ", item.product);
-    console.log("vendorId: ", item.vendorId);
-    console.log("productId: ", item.productId);
-    console.log("interface: ", item.interface);
-    console.log("path: ", item.path);
-    console.log();
-  });
-
   if (options.vendorid && options.productid) {
     console.log(
       "Looking for keyboard with VID:PID:",
@@ -90,8 +78,6 @@ if (options.devicelist) {
     );
 
     const findPath = (interface) => {
-      var devices = hid.devices();
-
       var deviceInfo = devices.find(
         (item) =>
           item.vendorId === Number(options.vendorid) &&
@@ -118,6 +104,18 @@ if (options.devicelist) {
     };
 
     console.log("Keyboard HID Address:", findPath(-1));
+  } else {
+    console.log("devices: ", devices);
+
+    // devices.forEach(function (item) {
+    //   console.log("manufacturer: ", item.manufacturer);
+    //   console.log("product: ", item.product);
+    //   console.log("vendorId: ", item.vendorId);
+    //   console.log("productId: ", item.productId);
+    //   console.log("interface: ", item.interface);
+    //   console.log("path: ", item.path);
+    //   console.log();
+    // });
   }
 
   return;
@@ -227,26 +225,26 @@ var createServer = function (options) {
 
       console.log("key: ", kbdevent.key);
       switch (kbdevent.key) {
-        case 87: // +
+        case 87: // +             (z axis down)
           socket.emit("write", options.port, "G91 Z-" + kbdevent.move + ";\n");
           break;
-        case 86: // -
+        case 86: // -             (z axis up)
           socket.emit("write", options.port, "G91 Z" + kbdevent.move + ";\n");
           break;
-        case 92: // arrow: left
+        case 92: // arrow: left   (move -X)
           socket.emit("write", options.port, "G91 X-" + kbdevent.move + ";\n");
           break;
-        case 94: // arrow: right
+        case 94: // arrow: right  (move +X)
           socket.emit("write", options.port, "G91 X" + kbdevent.move + ";\n");
           break;
-        case 96: // arrow: up
+        case 96: // arrow: up     (move +Y)
           socket.emit("write", options.port, "G91 Y" + kbdevent.move + ";\n");
           break;
-        case 90: // arrow: down
+        case 90: // arrow: down   (move -Y)
           socket.emit("write", options.port, "G91 Y-" + kbdevent.move + ";\n");
           break;
 
-        case 89: // arrow: End
+        case 89: // arrow: End    (move -X and -Y)
           socket.emit(
             "write",
             options.port,
@@ -254,7 +252,7 @@ var createServer = function (options) {
           );
           break;
 
-        case 97: // arrow: Page up
+        case 97: // arrow: Page up  (move +X and +Y)
           socket.emit(
             "write",
             options.port,
@@ -262,7 +260,7 @@ var createServer = function (options) {
           );
           break;
 
-        case 91: // arrow: Page Down
+        case 91: // arrow: Page Down  (move +X and -Y)
           socket.emit(
             "write",
             options.port,
@@ -270,7 +268,7 @@ var createServer = function (options) {
           );
           break;
 
-        case 95: // arrow: Page Down
+        case 95: // Key 7: Home  (move -X and +Y)
           socket.emit(
             "write",
             options.port,
@@ -278,29 +276,59 @@ var createServer = function (options) {
           );
           break;
 
-        case 93: // Key: 5
-          //socket.emit("write", options.port, "G90;\n");
+        case 93: // Key: 5        (move to work home)
           socket.emit("write", options.port, "G90 X0 Y0;\n");
           break;
 
-        case 99: // .
-          socket.emit("write", options.port, "G91;\n");
-          socket.emit("write", options.port, "G38.2 Z-100 F200\n");
+        case 99: // . - Probe
+          var SAFE_HEIGHT = -1; // Height needed to clear everything (negative number, distance below Z limit)
+          var PROBE_DISTANCE = 100;
+          var PROBE_FAST_FEEDRATE = 200; // mm/min
+          var PROBE_SLOW_FEEDRATE = 20; // mm/min
+          var TOUCH_PLATE_THICKNESS = 20; // mm
+          var RETRACTION_DISTANCE = 4; // mm
+
+          socket.emit("write", options.port, "G21;\n"); // Metric
+          socket.emit("write", options.port, "G90;\n"); // Absolute positioning
+          socket.emit("write", options.port, "G53 Z" + SAFE_HEIGHT + "\n"); //Move in Machine Coordinates
+
+          // ; Probe toward workpiece, stop on contact, signal error if failure
+          socket.emit("write", options.port, "G91;\n"); // Relative positioning
+          socket.emit(
+            "write",
+            options.port,
+            "G38.2 Z-" + PROBE_DISTANCE + " F" + PROBE_FAST_FEEDRATE + "\n"
+          );
+          socket.emit("write", options.port, "G0 Z1;\n");
+          socket.emit(
+            "write",
+            options.port,
+            "G38.2 Z-2 F" + PROBE_SLOW_FEEDRATE + "\n"
+          );
+          socket.emit("write", options.port, "G90;\n"); // Absolute positioning
+
+          // Update Z offset for tool taking touch plate height into account
           socket.emit(
             "write",
             options.port,
             "G10 L20 P1 Z" + options.probeOffset + "\n"
           );
+
+          // Retract from the touch plate
           socket.emit("write", options.port, "G91;\n");
-          socket.emit("write", options.port, "G0 Z4;\n");
-          socket.emit("write", options.port, "G90;\n");
+          socket.emit(
+            "write",
+            options.port,
+            "G0 Z" + RETRACTION_DISTANCE + ";\n"
+          );
+          socket.emit("write", options.port, "G90;\n"); // Absolute positioning
           break;
 
-        case 83:
+        case 83: // Set Work Position for X and Y to zero
           socket.emit("write", options.port, "G10 L20 P1 X0 Y0;\n");
           break;
 
-        case 98:
+        case 98: // Unlock
           socket.emit("write", options.port, "$X;\n");
           break;
 
@@ -314,7 +342,7 @@ var createServer = function (options) {
           kbdevent.default_move = 10;
           break;
 
-        case 88: // Key: OK or Enter
+        case 88: // Key: OK or Enter - HOMING
           socket.emit("write", options.port, "$H;\n");
         default:
           break;
