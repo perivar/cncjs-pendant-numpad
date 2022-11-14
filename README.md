@@ -90,14 +90,14 @@ The probe offset default is set to 1.56 mm ( i am using a piece of PCB with a th
 an extra start parameter for probe offset.
 
 ```
---probeoffset <value>
+--probeOffset <value>
 ```
 
 ### Using with other Num Pad's than LogiLink
 
 Because the keycodes for HID devices are the same for all keyboards, this should also work with 
 other Numpad's than LogiLink. Just find out the vendorID and productID of your device and
-start the pendant with --vendorid and --productid parameter.
+start the pendant with --vendorId and --productId parameter.
 
 Just run the following command to find out the vendor- and productId of your device
 
@@ -114,5 +114,5 @@ In this example the vendorID is 0x062a and the productID 0x4101. So you you need
 to start the pendant with the following additional parameters
 
 ```
---vendorid 0x062a --productid 0x4101
+--vendorId 0x062a --productId 0x4101
 ```

@@ -18,7 +18,7 @@ program
   .option("-l, --list", "list available ports then exit")
   .option(
     "-d, --devicelist",
-    "list available devices then exit (optionally vendor- and productid)"
+    "list available devices then exit (vendorId- and productId is optional)"
   )
   .option(
     "-s, --secret",
@@ -42,9 +42,9 @@ program
     "access token lifetime in seconds or a time span string (default: 30d)",
     "30d"
   )
-  .option("--probeoffset <offset>", "offset (thickness) for Z probe", "19.5")
-  .option("--vendorid <vendor>", "Vendor ID of USB HID device")
-  .option("--productid <product>", "Product ID of USB HID device");
+  .option("--probeOffset <offset>", "offset (thickness) for Z probe", "19.5")
+  .option("--vendorId <vendor>", "Vendor ID of USB HID device")
+  .option("--productId <product>", "Product ID of USB HID device");
 
 program.parse();
 // get the parsed options
@@ -70,18 +70,18 @@ if (options.list) {
 if (options.devicelist) {
   var devices = hid.devices();
 
-  if (options.vendorid && options.productid) {
+  if (options.vendorId && options.productId) {
     console.log(
       "Looking for keyboard with VID:PID:",
-      options.vendorid,
-      options.productid
+      options.vendorId,
+      options.productId
     );
 
     const findPath = (interface) => {
       var deviceInfo = devices.find(
         (item) =>
-          item.vendorId === Number(options.vendorid) &&
-          item.productId === Number(options.productid)
+          item.vendorId === Number(options.vendorId) &&
+          item.productId === Number(options.productId)
         //   &&
         //   item.interface === Number(interface)
       );
@@ -89,15 +89,15 @@ if (options.devicelist) {
       if (deviceInfo) {
         console.log(
           "Successfully found device with VID:PID:",
-          options.vendorid,
-          options.productid
+          options.vendorId,
+          options.productId
         );
         return deviceInfo.path;
       } else {
         console.log(
           "Failed searching for device with VID:PID:",
-          options.vendorid,
-          options.productid
+          options.vendorId,
+          options.productId
         );
         return "No device found";
       }
@@ -180,15 +180,15 @@ var createServer = function (options) {
       store.sender.status = data;
     });
 
-    console.log("Keyboard VID:PID is ", options.vendorid, options.productid);
+    console.log("Keyboard VID:PID is ", options.vendorId, options.productId);
 
     const findPath = (interface) => {
       var devices = hid.devices();
 
       var deviceInfo = devices.find(
         (item) =>
-          item.vendorId === Number(options.vendorid) &&
-          item.productId === Number(options.productid) &&
+          item.vendorId === Number(options.vendorId) &&
+          item.productId === Number(options.productId) &&
           item.interface === Number(interface)
       );
 
@@ -285,7 +285,6 @@ var createServer = function (options) {
           var PROBE_DISTANCE = 100;
           var PROBE_FAST_FEEDRATE = 200; // mm/min
           var PROBE_SLOW_FEEDRATE = 20; // mm/min
-          var TOUCH_PLATE_THICKNESS = 20; // mm
           var RETRACTION_DISTANCE = 4; // mm
 
           socket.emit("write", options.port, "G21;\n"); // Metric
