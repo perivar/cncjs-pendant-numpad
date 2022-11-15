@@ -94,7 +94,7 @@ if (options.list) {
   serialport
     .list()
     .then((ports) => {
-      ports.forEach(function (port) {
+      ports.forEach((port) => {
         console.log(port.path);
       });
     })
@@ -183,10 +183,10 @@ const createServer = (options) => {
     // find keyboard with index 0
     const keyboardHIDAddress = findPath(options.vendorId, options.productId, 0);
     if (!keyboardHIDAddress) {
-      console.log("Error! No keyboard found - exiting...");
-      return;
+      console.error("No keyboard found! Exiting...");
+      process.exit(1);
     } else {
-      console.log("Keyboard HID Address: ", keyboardHIDAddress);
+      console.log("Keyboard HID Address:", keyboardHIDAddress);
     }
 
     const keyboard_main = new hid.HID(keyboardHIDAddress);
