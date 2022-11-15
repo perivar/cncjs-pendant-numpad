@@ -185,6 +185,8 @@ const createServer = (options) => {
     if (!keyboardHIDAddress) {
       console.log("Error! No keyboard found - exiting...");
       return;
+    } else {
+      console.log("Keyboard HID Address: ", keyboardHIDAddress);
     }
 
     const keyboard_main = new hid.HID(keyboardHIDAddress);
