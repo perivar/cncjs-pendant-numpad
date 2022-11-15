@@ -1,5 +1,5 @@
 {
-  "name": "cncjs-pendant-logilink-numpad",
+  "name": "cncjs-pendant-numpad",
   "version": "0.1.1",
   "description": "A simple logilink numpad pendant for cncjs.",
   "main": "./index.js",
@@ -7,7 +7,7 @@
     "node": ">=10"
   },
   "bin": {
-    "cncjs-pendant-boilerplate": "bin/cncjs-pendant-numpad"
+    "cncjs-pendant-numpad": "bin/cncjs-pendant-numpad"
   },
   "preferGlobal": true,
   "scripts": {
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cncjs/cncjs-pendant-keyboard.git"
+    "url": "git+https://github.com/perivar/cncjs-pendant-numpad.git"
   },
   "keywords": [
     "cncjs",
@@ -25,9 +25,9 @@
   "author": "Nelio Santos <nelio@e01aio.com.br>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cncjs/cncjs-pendant-keyboard/issues"
+    "url": "https://github.com/perivar/cncjs-pendant-numpad/issues"
   },
-  "homepage": "https://github.com/cncjs/cncjs-pendant-keyboard#readme",
+  "homepage": "https://github.com/perivar/cncjs-pendant-numpad#readme",
   "dependencies": {
     "commander": "^7.0.0",
     "inquirer": "^7.0.0",

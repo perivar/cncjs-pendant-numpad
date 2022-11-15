@@ -116,3 +116,45 @@ to start the pendant with the following additional parameters
 ```
 --vendorId 0x062a --productId 0x4101
 ```
+----------------------------------------
+
+# Install cncjs-pendant-numpad
+
+Do the following to clone and install the cncjs-pendant-numpad software:
+
+```
+# Clone the github repo for perivar/cncjs-pendant-numpad
+cd ~
+git clone https://github.com/perivar/cncjs-pendant-numpad.git
+cd cncjs-pendant-numpad
+npm install -g
+```
+
+Note that there will be quite a few warnings, such as deprecated modules and compiler warnings.  You can ignore this for now, though someday work should be done fix this...!  Anyone want to attack this problem?!
+
+----------------------------------------
+
+# Configuring for auto-start
+
+There are many ways in Linux to configure auto-start on boot.  This example shows using [Production Process Manager [PM2]](http://pm2.io):
+
+```
+# Install Production Process Manager [PM2]
+npm install pm2 -g
+
+# Setup PM2 Startup Script
+pm2 startup
+
+#[PM2] Init System found: systemd
+#[PM2] To setup the Startup Script, copy/paste the following command:
+sudo env PATH=$PATH:/home/pi/.nvm/versions/node/v10.24.1/bin /home/pi/.nvm/versions/node/v10.24.1/lib/node_modules/pm2/bin/pm2 startup systemd -u pi --hp /home/pi
+
+# Start Num Pad Remote Pendant for CNCjs (connected to serial device @ /dev/ttyUSB0) with PM2
+pm2 start $(which cncjs-pendant-numpad) -- -p "/dev/ttyUSB0"
+
+# Set current running apps to startup
+pm2 save
+
+# Get list of PM2 processes
+pm2 list
+```
