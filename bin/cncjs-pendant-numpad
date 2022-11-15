@@ -180,17 +180,11 @@ const createServer = (options) => {
       store.sender.status = data;
     });
 
-    console.log("Keyboard VID:PID is ", options.vendorId, options.productId);
-
     // find keyboard with index 0
     const keyboardHIDAddress = findPath(options.vendorId, options.productId, 0);
-    console.log("Keyboard HID Address: ", keyboardHIDAddress);
-
     if (!keyboardHIDAddress) {
       console.log("Error! No keyboard found - exiting...");
       return;
-    } else {
-      console.log("Keyboard HID Address: ", keyboardHIDAddress);
     }
 
     const keyboard_main = new hid.HID(keyboardHIDAddress);
