@@ -1,6 +1,8 @@
 # cncjs-pendant-numpad
 A simple pendant for using cncjs with a num pad (as Wireless/USB Input). The code is based on [cncjs-pendant-keyboard](https://github.com/cncjs/cncjs-pendant-keyboard)
 
+**Note!** This repository has been deprecated and replaced with a Typescript version found here [ts-cncjs-pendant-numpad](https://github.com/perivar/ts-cncjs-pendant-numpad)
+
 ![LogiLink Wireless Numpad](docs/logilink_numpad.png)
 
 ![LogiLink Wireless Numpad](docs/numpad_labels.png)
